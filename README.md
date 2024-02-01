@@ -17,3 +17,5 @@ I hope that my coding journey can inspire others, help beginners, and foster a s
 Feel free to explore the content and reach out if you have any questions or suggestions. Thank you for joining me on this coding adventure!
 
 Happy Coding! 🚀
+
+-André Pont
