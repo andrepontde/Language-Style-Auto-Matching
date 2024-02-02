@@ -10,9 +10,11 @@ messages=[{"role": "system", "content": "You are an experienced psychologist, fa
 #Determining the role of the assistant 
 #It is declared outside the loop so the GPT does not receive the same instruction multiple times.
 
-with open("testCode.py", mode="r") as theCode:
+with open(r'C:\Users\andre\OneDrive\Programming\LSM_Tests\OpenAI_Learning_Program\OpenAI_API_Tests\testCode.py', mode="r", encoding="utf-8") as theCode:
   fixIt = theCode.read()
 #Function to open, read, copy and close a python code in the same directory.
+
+print(fixIt)
 
 response = ""
 #In this variable the model's answer will be registered and printed later.
@@ -22,35 +24,28 @@ while True:
   userInput = input("André: ")
   #Declaring the variable "userInput" to be able to communicate dinamically with the model in the terminal.
   
-  
   if userInput.lower() in ["check this code", "use my code"]:
-    messages.append({"role": "user", "content": "please fix it: {}".format(fixIt)}),
+    messages.append({"role": "user", "content": "please fix this code: " + fixIt}),
     #simple function to trigger a code correction tool
-    
-    completion = client.chat.completions.create(
-      #Using the chat completition API, to be able to call a pretrained model.
-      model="gpt-3.5-turbo-0125",
-      #Selection of the model, this can be replaced to make it more powerfull at a higher token cost.
-      messages=messages,
-      temperature=0.5,
-      #Temperature sets the amount of randomization the model could generate, a higher value results on more creative but inaccurate results, and viceversa.
-      max_tokens=16
-      #Enables a limit on the amount of tokens that can be used by the model, that stuff doesn't grow on trees!
-    )
   else:
     messages.append({"role": "user", "content": userInput}),
     #Asigning a prompt from the user.  
-    completion = client.chat.completions.create(
-      model="gpt-3.5-turbo-0125",
-      messages=messages,
-      temperature=0.5,
-      max_tokens=16
+      
+  completion = client.chat.completions.create(
+    #Using the chat completition API, to be able to call a pretrained model.
+    model="gpt-3.5-turbo-0125",
+    #Selection of the model, this can be replaced to make it more powerfull at a higher token cost.
+    messages=messages,
+    temperature=0.5,
+    #Temperature sets the amount of randomization the model could generate, a higher value results on more creative but inaccurate results, and viceversa.
+    max_tokens=512
+    #Enables a limit on the amount of tokens that can be used by the model, that stuff doesn't grow on trees!
   )
-    response = completion.choices[0].message
-    messages.append(response)
-    #When appending the responses to the messages variable, the model is able to keep track of the conversation.
-    print(response)
-    #Prints only the response, and declares all of the variables used as well.
+  response = completion.choices[0].message
+  messages.append(response)
+  #When appending the responses to the messages variable, the model is able to keep track of the conversation.
+  print(response)
+  #Prints only the response, and declares all of the variables used as well.
 
 
 
