@@ -1,10 +1,16 @@
-from openai import OpenAI
-# Importing the OpenAI library from OpenAI in order to be able to use the API
 import os
 # Enables the program to be able to comunicate with the operating system (to be able to call the api key)
+import json
+#This is used so in the future a function is able to communicate with the API in json format.
+import promptlayer
+#This enables the promptlayer API to keep track of the requests and usage of the OpenAI API
+OpenAI = promptlayer.openai.OpenAI
+# Importing the OpenAI library from OpenAI in order to be able to use the API, this is done on top of the promptlayer library.
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 #Calling the secret OPENAI_API_KEY from my system enviroment, this is not necesary, but this approach is more secure. 
+promptlayer.api_key = (os.environ.get("PROMPTLAYER_API_KEY"))
+
 
 messages=[{"role": "system", "content": "You are an experienced psychologist, familiar with the work from Sigmun Freud."}]
 #Determining the role of the assistant 
@@ -38,8 +44,10 @@ while True:
     messages=messages,
     temperature=0.5,
     #Temperature sets the amount of randomization the model could generate, a higher value results on more creative but inaccurate results, and viceversa.
-    max_tokens=512
+    max_tokens=512,
     #Enables a limit on the amount of tokens that can be used by the model, that stuff doesn't grow on trees!
+    pl_tags=["getting-started"]
+    #This tag serves as a bookmark for the promptlayer website to facilitate the location of prompts.
   )
   response = completion.choices[0].message
   messages.append(response)
